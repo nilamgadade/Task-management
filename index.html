@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="taskManagerApp">
+
+<head>
+  <title>Task Manager</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.2/angular.min.js"></script>
+  <script src="app.js"></script>
+</head>
+
+<body ng-controller="TaskController as taskCtrl">
+  <h1>Task Manager</h1>
+
+  <form ng-submit="taskCtrl.addTask()">
+    <input type="text" ng-model="taskCtrl.newTask" placeholder="Add Task" required>
+    <button type="submit">Add</button>
+  </form>
+
+  <label>Filter: <input type="text" ng-model="taskCtrl.filterText"></label>
+
+  <table>
+    <tr>
+      <th ng-click="taskCtrl.sort('title')">Task</th>
+      <th ng-click="taskCtrl.sort('assignedTo')">Assigned To</th>
+      <th>Action</th>
+    </tr>
+    <tr ng-repeat="task in taskCtrl.filteredTasks = (taskCtrl.tasks | filter:taskCtrl.filterText | orderBy:taskCtrl.sortColumn)">
+      <td>{{ task.title }}</td>
+      <td>{{ task.assignedTo }}</td>
+      <td>
+        <button ng-click="taskCtrl.editTask(task)">Edit</button>
+        <button ng-click="taskCtrl.deleteTask(task)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+  <div ng-show="taskCtrl.editMode">
+    <h2>Edit Task</h2>
+    <form ng-submit="taskCtrl.updateTask()">
+      <input type="text" ng-model="taskCtrl.editTask.title" required>
+      <input type="text" ng-model="taskCtrl.editTask.assignedTo" required>
+      <button type="submit">Update</button>
+      <button ng-click="taskCtrl.cancelEdit()">Cancel</button>
+    </form>
+  </div>
+
+</body>
+
+</html>
